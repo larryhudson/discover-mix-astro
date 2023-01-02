@@ -1,7 +1,10 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import PlaylistTypes from "@components/PlaylistTypes.vue";
 ---
 
 <Layout stepNum={2} title="2. Choose types">
-  <p>Types will go here.</p>
+  <PlaylistTypes client:only>
+    <div slot="fallback">Fill in the playlist types here.</div>
+  </PlaylistTypes>
 </Layout>

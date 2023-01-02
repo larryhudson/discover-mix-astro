@@ -1,11 +1,18 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import ChosenGenres from "@components/ChosenGenres.vue";
 ---
 
 <Layout stepNum={1} title="1. Explore genres">
   <p>Go to your <a href="/app/top-genres/">top genres</a></p>
 
   <h2>Your mix</h2>
+
+  <ChosenGenres client:only>
+    <div slot="fallback">
+      <p>Fallback for no JS</p>
+    </div>
+  </ChosenGenres>
 
   <p>Chosen genres will go here.</p>
 </Layout>

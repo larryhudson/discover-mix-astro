@@ -11,9 +11,13 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/preact": "^1.2.0",
     "@astrojs/vercel": "^2.4.0",
+    "@astrojs/vue": "^1.2.2",
     "astro": "^1.8.0",
     "cheerio": "^1.0.0-rc.12",
-    "uuid": "^9.0.0"
+    "preact": "^10.11.3",
+    "uuid": "^9.0.0",
+    "vue": "^3.2.45"
   }
 }

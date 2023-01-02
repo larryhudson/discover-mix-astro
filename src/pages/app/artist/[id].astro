@@ -1,11 +1,14 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import { getArtistData } from "@utils/artists/get-artist-data";
+import { map } from "cheerio/lib/api/traversing";
 
 const artistId = Astro.params.id;
+const spotifyAccessToken = Astro.cookies.get("spotify-access-token").value;
 
-const artistData = {
-  name: "Name goes here",
-};
+const artistData = await getArtistData({ spotifyAccessToken, artistId });
+
+Astro.response.headers.set("Cache-Control", "max-age=0, s-maxage=604800");
 ---
 
 <Layout
@@ -13,5 +16,77 @@ const artistData = {
   backLinkText="Back to your mix"
   backLinkUrl="/app/1-explore/"
 >
-  <p>To be implemented.</p>
+  <div id="artist-detail-app" data-vue:mounted="init">
+    <!-- artist image -->
+    <img width="150" height="150" style="max-width: 150px; height: auto; background-color: var(--color-blue-5)"src={artistData.images.at(-2).url}/>
+    <!-- View on Spotify link -->
+    <p>
+        <a class="button button-secondary" href={`https://open.spotify.com/artist/${artistData.id}`} target="_blank">View artist on
+            Spotify &rarr;</a>
+    </p>
+    <!-- Genres for this artist -->
+    <h3 style="margin-top: 1rem">Genres for this artist</h3>
+    <ul class="pills">
+        {artistData.genres.map(genre => (
+            <li style="display: inline-block">
+                <a
+                    class="pill-link button button-secondary"
+                    // TODO: :class="{'primary-highlight-subtle': isChoosing('{{ genre }}')}"
+                    href={`/app/genre/${encodeURIComponent(genre)}/`}>{genre}</a>
+            </li>
+        ))}
+    </ul>
+    <!-- Top tracks for this artist -->
+    <div>
+        <h3>Top tracks for this artist</h3>
+        <p>Tap a song below to hear a preview.</p>
+        <div>
+            <ul class="list-flex flex-wrap track-previews">
+                {artistData.topTracks.map(track => (
+                    <li>
+                        <form action={`https://open.spotify.com/track/${track.id}`}>
+                            <button title={`${track.name} by ${track.artistStr}`} class="track-preview-button"
+                            // TODO @click.prevent="playTrack('{{ track.id }}')"
+                            // TODO :aria-pressed="playingTrackId === '{{ track.id }}' ? 'true' : undefined"
+                            >
+                                <img src={track.imageUrl} width={track.imageWidth} height={track.imageWidth} alt=""/>
+                            </button>
+                        </form>
+                    </li>
+                ))}
+            </ul>
+        </div>
+        <!-- TODO: Playing track container -->
+        <!-- <div class="playing-track-container hide-no-js" v-if="playingTrackId !== null">
+            <div class="playing-track">
+                <div class="image-and-name">
+                    <div>
+                        <img :src="playingTrack.imageUrl"/>
+                    </div>
+                    <div>
+                        <p>
+                            <strong>${playingTrack.name}</strong>
+                        </p>
+                        <p>
+                            <a v-for="trackArtist in playingTrack.artists" :href="`/app/artist/?artistId=${trackArtist.id}`">${trackArtist.name}</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="stop-button">
+                    <button @click="playingTrackId = null">× Stop</button>
+                </div>
+                <audio @loadedMetadata="playAudio" id="preview-audio" :src="playingTrack.mp3Url"></audio>
+            </div>
+        </div> -->
+        <!-- Related artists -->
+        <h3>Related artists</h3>
+        <ul class="pills">
+            {artistData.related.map(relatedArtist => (
+                <li style="display: inline-block">
+                    <a class="pill-link button button-secondary" href={`/app/artist/${relatedArtist.id}/`}>{relatedArtist.name}</a>
+                </li>
+            ))}
+        </ul>
+    </div>
+</div>
 </Layout>

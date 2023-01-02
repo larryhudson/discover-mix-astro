@@ -1,5 +1,20 @@
 ---
-const { name } = Astro.props;
+const { name, count } = Astro.props;
 ---
 
-<li><a href={`/app/genre/${encodeURIComponent(name)}`}>{name}</a></li>
+<li>
+  <a class="no-underline" href={`/app/genre/${encodeURIComponent(name)}/`}>
+    <span class="genre-name">{name} &rarr;</span>
+    <span class="artist-count" title={`${count} of your top artists`}
+      >{count}×</span
+    >
+  </a>
+  <!-- <button class="toggle-button fade-no-js" data-click="toggleGenre(genre.name)">
+        <span class="hide-no-js" v-if="isChoosing(genre.name)">
+            × remove
+        </span>
+        <span v-else="">
+            + add
+        </span>
+    </button> -->
+</li>

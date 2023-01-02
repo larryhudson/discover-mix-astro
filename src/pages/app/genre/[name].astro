@@ -1,8 +1,7 @@
 ---
 import { getGenreData } from "@utils/genres/get-genre-data";
 import Layout from "@layouts/Layout.astro";
-import ArtistsForGenre from "@components/ArtistsForGenre.astro";
-import SimilarGenres from "@components/SimilarGenres.astro";
+import ToggleGenreButton from "@components/ToggleGenreButton.vue";
 
 const genreName = Astro.params.name;
 
@@ -18,10 +17,161 @@ Astro.response.headers.set("Cache-Control", "max-age=0, s-maxage=604800");
   backLinkText="Back to your mix"
   backLinkUrl="/app/1-explore/"
 >
-  <h2>Artists</h2>
-  <ArtistsForGenre artists={genreData.artists} />
+  <div id="genre-detail-app" data-vue:mounted="init">
+    <ToggleGenreButton genreName={genreData.name} client:only>
+      <button
+        slot="fallback"
+        class="button button-generous primary-highlight-subtle"
+      >
+        add {genreData.name} to your mix
+      </button>
+    </ToggleGenreButton>
+    <!-- <button
+        class="button button-generous fade-no-js"
+        data-click="toggleGenre"
+        data-class="{'primary-highlight-obvious': isChoosing(genreName), 'primary-highlight-subtle': !isChoosing(genreName)}"
+        >
+        <span class="hide-no-js" v-if="isChoosing(genreName)">
+            × remove
+            <strong>{{ genre.name }}</strong>
+            from your mix
+        </span>
+        <span v-else="">
+            + add
+            <strong>{{ genre.name }}</strong>
+            to your mix
+        </span>
+    </button> -->
+    <h3>Similar genres</h3>
+    <ul class="pills">
+      {
+        genreData.similarGenres.map((similarGenre) => (
+          <li style="display: inline-block">
+            <a
+              class="pill-link button-secondary button"
+              TODO:class="{'primary-highlight-subtle': isChoosing('{{ similarGenre.name }}')}"
+              href={`/app/genre/${encodeURIComponent(similarGenre.name)}/`}
+            >
+              {similarGenre.name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <div>
+      <div
+        style="margin-top: 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;"
+      >
+        <h3 style="margin-top: 0">Explore what is in this genre</h3>
+        <div class="select-container hide-no-js">
+          <select
+            style="display: inline-block"
+            data-change="updatePreviewPlaylist"
+          >
+            {
+              genreData.playlists.map((playlist) => (
+                <option value={playlist.id}>{playlist.type}</option>
+              ))
+            }
+          </select>
+        </div>
+      </div>
+      <p>
+        Tap a song below to hear a preview.
+        <a
+          class="button button-secondary"
+          target="_blank"
+          href={`https://open.spotify.com/playlist/${genreData.soundPlaylistId}`}
+          data-href="`https://open.spotify.com/playlist/${previewPlaylistId}`"
+          >View full playlist on Spotify &rarr;</a
+        >
+      </p>
 
-  <h2>Similar genres</h2>
-  <SimilarGenres genres={genreData.similarGenres} />
-  <pre>{JSON.stringify(genreData,null,2)}</pre>
+      <!-- TODO: playing track container -->
+      <!-- <div class="playing-track-container hide-no-js" v-if="playingTrack">
+            <div class="playing-track">
+                <div class="image-and-name">
+                    <div>
+                        <img :src="playingTrack.imageUrl"/>
+                    </div>
+                    <div>
+                        <p>
+                            <strong>${playingTrack.name}</strong>
+                        </p>
+                        <p>
+                            <a v-for="artist in playingTrack.artists" style="margin-right: 0.5rem" :href="`/app/artist/?artistId=${artist.id}`">
+                                ${artist.name}</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="stop-button">
+                    <button @click="stopPlaying">× Stop</button>
+                </div>
+                <audio @loadedMetadata="playAudio" id="preview-audio" :src="playingTrack.mp3Url"></audio>
+            </div>
+        </div> -->
+
+      <div>
+        <ul class="list-flex flex-wrap track-previews initial-pre-js">
+          {
+            genreData.soundPlaylistTracks.map((track) => (
+              <li>
+                <form action={`https://open.spotify.com/track/${track.id}`}>
+                  <button
+                    title={`${track.name} by ${track.artistStr}`}
+                    class="track-preview-button"
+                  >
+                    <img
+                      loading="lazy"
+                      src={track.imageUrl}
+                      width={track.imageWidth}
+                      height={track.imageWidth}
+                      alt=""
+                    />
+                  </button>
+                </form>
+              </li>
+            ))
+          }
+        </ul>
+
+        <!-- Hydrated tracks with petite-vue -->
+        <!-- <ul class="list-flex flex-wrap track-previews hide-no-js">
+                <li v-for="track in previewTracks">
+                    <button
+                        :title="`${track.name} by ${track.artistStr}`"
+                        class="track-preview-button"
+                        @click="playTrack(track.id)"
+                        :aria-pressed="playingTrackId === track.id ? 'true' : undefined">
+                        <img loading="lazy" :src="track.imageUrl" :width="track.imageWidth" :height="track.imageWidth" alt=""/>
+                    </button>
+                </li>
+            </ul> -->
+      </div>
+    </div>
+    <h3>Artists for this genre</h3>
+    {
+      genreData.artists.length > 5 && (
+        <p>You can swipe to the right to see more artists.</p>
+      )
+    }
+
+    <ul class="search-results search-results-small scroll-sideways">
+      {
+        genreData.artists.map((artist) => (
+          <a href={`/app/artist/${encodeURIComponent(artist.id)}/`}>
+            <div>
+              <img
+                src={artist.images.at(-1).url}
+                height={artist.images.at(-1).height}
+                width={artist.images.at(-1).width}
+                alt=""
+              />
+            </div>
+            <div class="artist-name">{artist.name}</div>
+          </a>
+        ))
+      }
+    </ul>
+  </div>
 </Layout>
