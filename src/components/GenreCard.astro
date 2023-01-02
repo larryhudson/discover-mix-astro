@@ -1,0 +1,5 @@
+---
+const { name } = Astro.props;
+---
+
+<li><a href={`/app/genre/${encodeURIComponent(name)}`}>{name}</a></li>

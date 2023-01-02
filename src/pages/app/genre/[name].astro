@@ -1,0 +1,15 @@
+---
+import { getGenreData } from "@utils/genres/get-genre-data";
+
+const genreName = Astro.params.name;
+
+const spotifyAccessToken = Astro.cookies.get("spotify-access-token").value;
+
+const genreData = await getGenreData({ spotifyAccessToken, genreName });
+
+Astro.response.headers.set("Cache-Control", "max-age=0, s-maxage=604800");
+---
+
+<h1>{genreName}</h1>
+
+<pre>{JSON.stringify(genreData,null,2)}</pre>

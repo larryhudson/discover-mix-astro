@@ -1,0 +1,20 @@
+---
+import { getTopGenres } from "@utils/genres/get-top-genres";
+import GenreCard from "@components/GenreCard.astro";
+
+const spotifyAccessToken = Astro.cookies.get("spotify-access-token").value;
+
+console.log({ spotifyAccessToken });
+
+const topGenres = await getTopGenres({
+  spotifyAccessToken,
+  timeRange: "medium_term",
+  limit: 20,
+});
+---
+
+<h1>Top genres</h1>
+
+<ul>
+  {topGenres.map((genre) => <GenreCard name={genre.name} />)}
+</ul>
