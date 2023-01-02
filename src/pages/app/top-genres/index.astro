@@ -1,6 +1,7 @@
 ---
 import { getTopGenres } from "@utils/genres/get-top-genres";
 import GenreCard from "@components/GenreCard.astro";
+import Layout from "@layouts/Layout.astro";
 
 const spotifyAccessToken = Astro.cookies.get("spotify-access-token").value;
 
@@ -13,8 +14,12 @@ const topGenres = await getTopGenres({
 });
 ---
 
-<h1>Top genres</h1>
-
-<ul>
-  {topGenres.map((genre) => <GenreCard name={genre.name} />)}
-</ul>
+<Layout
+  title="Top genres"
+  backLinkText="Back to your mix"
+  backLinkUrl="/app/1-explore/"
+>
+  <ul>
+    {topGenres.map((genre) => <GenreCard name={genre.name} />)}
+  </ul>
+</Layout>

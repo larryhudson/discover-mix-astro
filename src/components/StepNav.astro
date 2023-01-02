@@ -1,0 +1,26 @@
+---
+const steps = [
+  { label: "1. Explore genres", url: "/app/1-explore/" },
+  { label: "2. Choose types", url: "/app/2-types/" },
+  { label: "3. Create playlist", url: "/app/3-create/" },
+];
+
+const { stepNum } = Astro.props;
+---
+
+<nav class="step-nav" aria-label="Step">
+  <ul>
+    {
+      steps.map((step, index) => {
+        <li>
+          <a
+            aria-current={stepNum === index + 1 ? "page" : undefined}
+            href={step.url}
+          >
+            {step.label}
+          </a>
+        </li>;
+      })
+    }
+  </ul>
+</nav>
