@@ -1,6 +1,8 @@
 ---
 import { getGenreData } from "@utils/genres/get-genre-data";
 import Layout from "@layouts/Layout.astro";
+import ArtistsForGenre from "@components/ArtistsForGenre.astro";
+import SimilarGenres from "@components/SimilarGenres.astro";
 
 const genreName = Astro.params.name;
 
@@ -16,5 +18,10 @@ Astro.response.headers.set("Cache-Control", "max-age=0, s-maxage=604800");
   backLinkText="Back to your mix"
   backLinkUrl="/app/1-explore/"
 >
+  <h2>Artists</h2>
+  <ArtistsForGenre artists={genreData.artists} />
+
+  <h2>Similar genres</h2>
+  <SimilarGenres genres={genreData.similarGenres} />
   <pre>{JSON.stringify(genreData,null,2)}</pre>
 </Layout>

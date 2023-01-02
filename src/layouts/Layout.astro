@@ -1,9 +1,9 @@
 ---
 export interface Props {
-  title: string;
-  backLinkUrl: string;
-  backLinkText: string;
-  hideTitleInLayout: boolean;
+  title?: string;
+  backLinkUrl?: string;
+  backLinkText?: string;
+  stepNum?: number;
 }
 
 import StepNav from "@components/StepNav.astro";
@@ -20,7 +20,7 @@ const { title, stepNum, backLinkUrl, backLinkText, hideTitleInLayout } =
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ title }} | discover-mix</title>
+    <title>{title} | discover-mix</title>
     <link rel="stylesheet" href="/css/custom-select.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <meta

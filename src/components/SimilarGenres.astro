@@ -1,0 +1,15 @@
+---
+const { genres } = Astro.props;
+---
+
+<ul>
+  {
+    genres.map((genre) => (
+      <li>
+        <a href={`/app/genre/${encodeURIComponent(genre.name)}`}>
+          {genre.name}
+        </a>
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,17 @@
+---
+import Layout from "@layouts/Layout.astro";
+
+const artistId = Astro.params.id;
+
+const artistData = {
+  name: "Name goes here",
+};
+---
+
+<Layout
+  title={artistData.name}
+  backLinkText="Back to your mix"
+  backLinkUrl="/app/1-explore/"
+>
+  <p>To be implemented.</p>
+</Layout>

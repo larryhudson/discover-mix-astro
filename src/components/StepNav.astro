@@ -11,7 +11,7 @@ const { stepNum } = Astro.props;
 <nav class="step-nav" aria-label="Step">
   <ul>
     {
-      steps.map((step, index) => {
+      steps.map((step, index) => (
         <li>
           <a
             aria-current={stepNum === index + 1 ? "page" : undefined}
@@ -19,8 +19,8 @@ const { stepNum } = Astro.props;
           >
             {step.label}
           </a>
-        </li>;
-      })
+        </li>
+      ))
     }
   </ul>
 </nav>

@@ -1,0 +1,15 @@
+---
+const { artists } = Astro.props;
+---
+
+<ul>
+  {
+    artists.map((artist) => (
+      <li>
+        <a href={`/app/artist/${encodeURIComponent(artist.id)}`}>
+          {artist.name}
+        </a>
+      </li>
+    ))
+  }
+</ul>
