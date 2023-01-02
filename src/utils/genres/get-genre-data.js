@@ -8,7 +8,7 @@ import { lookupSearch } from "../search/lookup-search";
 
 // get similar genres
 import { getSimilarGenres } from "./find-similar-genres.js";
-import { lookupPlaylistTracks } from "../playlists/lookup-playlist-data.js";
+import { lookupPlaylistTracks } from "../playlists/lookup-playlist-data";
 
 export function getArtistsForGenre({ spotifyAccessToken, genreName }) {
   return lookupSearch({

@@ -1,4 +1,4 @@
-import genresJson from "./genres/genres.json" assert { type: "json" };
+import genresJson from "./genres.json" assert { type: "json" };
 
 async function getTopArtists({ spotifyAccessToken, timeRange }) {
   const spotifyResponse = await fetch(
